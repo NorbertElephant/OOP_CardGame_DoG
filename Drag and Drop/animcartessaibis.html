@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Drag & Drop essai bis</title>
+    <link rel="stylesheet" href="stylessai.css">
+</head>
+
+<body>
+    <div class="board">
+
+     
+    </div>
+
+    <div class="main" >
+        
+       
+    </div>
+    <div id="pioche">
+        <div class="carte">#1</div>
+        <div class="carte">#2</div>
+        <div class="carte">#3</div>
+        <div class="carte">#4</div>
+        <div class="carte">#5</div>
+        <div class="carte">#6</div>
+        <div class="carte">#7</div> 
+    </div>
+    <input type="button" id="pioche" value="piocher une carte" />
+</body>
+
+<script>
+    (function(){
+        var dndHandler = {
+
+            draggedElement: null, // Propriété pointant vers l'élément en cours de déplacement
+
+            applyDragEvents: function(element) {
+                
+                element.draggable = true;
+
+                var dndHandler = this; // Cette variable est nécessaire pour que l'événement « dragstart » accède facilement au namespace « dndHandler »
+
+                element.addEventListener('dragstart', function(e) {
+                    dndHandler.draggedElement = e.target; // On sauvegarde l'élément en cours de déplacement
+                    e.dataTransfer.setData('text/plain', ''); // Nécessaire pour Firefox
+                },false);  
+            },
+
+            applyDropEvents: function(dropper) {
+            
+                dropper.addEventListener('dragover', function(e) {
+                    e.preventDefault(); // On autorise le drop d'éléments
+                    this.className = 'board drop_hover'; // Et on applique le style adéquat à notre zone de drop quand un élément la survole
+                },false);
+            
+                dropper.addEventListener('dragleave', function() {
+                    this.className = 'board'; // On revient au style de base lorsque l'élément quitte la zone de drop
+                });
+            
+                var dndHandler=this;
+
+                dropper.addEventListener('drop', function(e) {
+
+                    var target = e.target,
+                    draggedElement = dndHandler.draggedElement, // Récupération de l'élément concerné
+                    clonedElement = draggedElement.cloneNode(true); // On créé immédiatement le clone de cet élément
+                    while (target.className.indexOf('board') == -1) { // Cette boucle permet de remonter jusqu'à la zone de drop parente
+                    target = target.parentNode;
+                    }
+                    target.className = 'board'; // Application du style par défaut
+                    clonedElement = target.appendChild(clonedElement); // Ajout de l'élément cloné à la zone de drop actuelle
+                    dndHandler.applyDragEvents(clonedElement); // Nouvelle application des événements qui ont été perdus lors du cloneNode()
+                    draggedElement.parentNode.removeChild(draggedElement); // Suppression de l'élément d'origine
+                });
+            }
+        };
+
+        var elements = document.querySelectorAll('.carte'),
+            elementsLen = elements.length;
+
+        for (var i = 0 ; i < elementsLen ; i++) {
+            dndHandler.applyDragEvents(elements[i]); // Application des paramètres nécessaires aux éléments déplaçables
+        }
+
+            var droppers = document.querySelectorAll('.board'),
+            droppersLen = droppers.length;
+
+        for (var i = 0 ; i < droppersLen ; i++) {
+            dndHandler.applyDropEvents(droppers[i]); // Application des événements nécessaires aux zones de drop
+        }
+
+// fonction pioche*****************************************************************************************
+
+   function $(id){return document.getElementById(id);};
+    
+    var cartes = ['main'];
+    var nombreDeCartesTirees = 1;
+ 
+ 
+function pioche(){
+  if(nombreDeCartesTirees >= 5) {
+    alert('toutes les cartes ont deja été tirées'); return;
+}
+  $('main'+ ++nombreDeCartesTirees).src = cartes.splice(Math.floor(Math.random() * cartes.length),1)[0];
+}
+ 
+$('main').onclick = pioche;
+ 
+    })();
+
+
+    </script>
+</html>

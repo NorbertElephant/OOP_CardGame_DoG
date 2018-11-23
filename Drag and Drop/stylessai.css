@@ -1,0 +1,34 @@
+.board {
+    margin: 50px 10px 10px 50px;
+    width: 800px;
+    height: 500px;
+    background-color:rgb(101, 82, 209) ;
+    border: 1px solid #111;
+    
+    border-radius: 10px;
+    transition: all 200ms linear;
+}
+
+
+/* .drop_hover {
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8) inset;
+} */
+.main{}
+
+.carte {
+    display: inline-block;
+    margin: 20px 10px 10px 20px;
+    padding-top: 20px;
+    width: 80px;
+    height: 100px;
+    color:white ;
+    background-color: rgb(165, 35, 240);
+    border: 4px solid black;
+    text-align: center;
+    font-size: 2em;
+    cursor: pointer;
+    border-radius: 10%;
+    transition: all 200ms linear;
+    user-select: none;
+}
+
